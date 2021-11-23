@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="mano_autotest.autotest" class="Mano\AutotestBundle\Autotest" public="true">
+            <argument type="service" id="mano_autotest.path_resolver_interface"/>
+            <argument type="service" id="router.default"/>
+        </service>
+        <service id="Mano\AutotestBundle\Autotest" alias="mano_autotest.autotest"/>
+        <service id="mano_autotest.path_resolver" class="Mano\AutotestBundle\SimplePathResolver"/>
+        <service id="mano_autotest.path_resolver_interface" alias="mano_autotest.path_resolver"/>
+    </services>
+</container>

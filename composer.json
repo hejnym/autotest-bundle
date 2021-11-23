@@ -1,0 +1,34 @@
+{
+    "name": "mano/autotest-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony bundle for automatic routes testing.",
+    "keywords": ["testing"],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mano\\AutotestBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mano\\AutotestBundle\\Tests\\": "tests/"
+        }
+    },
+
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Miloš Hejný",
+            "email": "milos.hejny@uzis.cz"
+        }
+    ],
+    "require": {
+        "php": ">7.2",
+        "symfony/phpunit-bridge": ">=5.1",
+        "symfony/framework-bundle": ">=5.1",
+        "symfony/browser-kit": ">=5.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.3"
+    }
+}

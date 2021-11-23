@@ -1,0 +1,7 @@
+.idea
+/vendor/
+phpunit.xml
+composer.lock
+var/cache/
+/.phpunit.result.cache
+/.php-cs-fixer.cache
