@@ -1,4 +1,4 @@
-# Autotest budle
+# Autotest bundle
 
 Symfony bundle for automatic routes testing - check the response code of all static routes. 
 It supports both PHPUnit and Codeception. The module lists all the available routes with GET method, add default values and filter just those that does not
