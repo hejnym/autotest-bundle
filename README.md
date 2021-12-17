@@ -15,7 +15,7 @@ Installation
 - use  [Composer](https://getcomposer.org/download/) to install the bundle
 
 ```console
-composer require mano/autotest --dev
+composer require mano/autotest-bundle --dev
 ```
 
 - enable the bundle in *config/bundles.php* by pasting new array item
