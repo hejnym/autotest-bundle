@@ -107,6 +107,8 @@ class fooCest
 }
 ```
 
+** Codeception is stricter with login - different authenticators (api keys) will not work out of the box.**
+
 Extension
 ------------
 The used path resolver is simple - it just adds defaults  to the path and takes only GET method that does not 
