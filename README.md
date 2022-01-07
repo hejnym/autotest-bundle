@@ -49,9 +49,21 @@ autotest:
     user_repository:      App\Repository\UserRepository
 ```
 
+Some routes might need to be excluded though (ex. '/logout','/login') as they are redirected.
+It is advisable to declare methods in the route annotation, so that you do not need to exclude here.
+
+```yaml
+exclude: [
+   '/logout','/login', # always redirects
+   '/api/list', # secured by api acl
+   '/foo', # get method that passes required params in the query
+]
+```
 
 Usage
 ------------
+
+**Cache needs to be cleared after modifications in the project before running the test.** 
 
 ### PHPUnit
 
