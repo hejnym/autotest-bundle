@@ -14,8 +14,6 @@
             "Mano\\AutotestBundle\\Tests\\": "tests/"
         }
     },
-
-    "version": "1.0.0",
     "authors": [
         {
             "name": "Miloš Hejný",
