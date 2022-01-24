@@ -46,7 +46,8 @@ class PhpUnitWebTest extends WebTestCase
         }
 
         $this->client->request('GET', $path);
-        $this->assertResponseIsSuccessful();
+        $statusCode = $this->client->getResponse()->getStatusCode();
+        $this->assertTrue($statusCode >= 200 && $statusCode < 300,'Response code not within 2** range.');
     }
 
 
