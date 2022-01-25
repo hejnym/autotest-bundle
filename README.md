@@ -89,6 +89,17 @@ Alternatively you can skip editing phpunit.xml and just extend any test.
 class someTest extends \Mano\AutotestBundle\Test\PhpUnitWebTest
 ```
 
+If you come across the exception "User repository 'App\Repository\UserRepository' not found" and you are sure it exists,
+register the service as public.
+
+```yaml
+# config/services.yaml
+services:
+    ...
+    App\Repository\UserRepository:
+      public: true
+```
+
 ### Codeception
 
 - add the module to a suite (*functional.suite.yml*)
