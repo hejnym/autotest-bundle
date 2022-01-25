@@ -5,7 +5,7 @@ namespace Mano\AutotestBundle;
 use Symfony\Component\Routing\Route;
 
 /**
- * Get path of the route as a string
+ * Resolve the path and set it to the RouteDecorator
  */
 interface PathResolverInterface
 {
