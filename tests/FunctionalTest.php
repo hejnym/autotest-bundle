@@ -30,6 +30,7 @@ class FunctionalTest extends TestCase
             return $route->getResolvedPath();
         }, $paths);
 
+        // only foo and foolo
         $this->assertCount(2, $pathNames);
 
         // default added
@@ -51,7 +52,7 @@ class FunctionalTest extends TestCase
         $paths = $autotestService->getRelevantRoutes();
 
         // all routes taken
-        $this->assertCount(4, $paths);
+        $this->assertCount(5, $paths);
         $this->assertEquals('foo', $paths[0]->getResolvedPath());
     }
 }

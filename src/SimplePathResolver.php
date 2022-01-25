@@ -29,7 +29,7 @@ class SimplePathResolver implements PathResolverInterface
     {
         $replaced = $route->getPath();
         foreach ($route->getDefaults() as $name => $value) {
-            if ($name !== '_controller' && strpos($replaced, '{'.$name.'}')) {
+            if ($value !== null && $name !== '_controller' && strpos($replaced, '{'.$name.'}')) {
                 $replaced = str_replace('{'.$name.'}', $value, $replaced);
             }
         }
