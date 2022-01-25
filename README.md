@@ -30,7 +30,7 @@ composer require mano/autotest-bundle --dev
 Config
 ------------
 
-create file *config/packages/autotest.yaml* and override the defaults if necessary.
+create file *config/packages/test/autotest.yaml* and override the defaults if necessary.
 
 ```yaml
 # Default configuration for extension with alias: "autotest"
