@@ -38,10 +38,7 @@ class SimplePathResolver implements PathResolverInterface
 
     private function hasWildcard(string $path): bool
     {
-        if (strpos($path, '{')) {
-            return true;
-        }
-        return false;
+        return strpos($path, '{') !== false;
     }
 
     private function hasGetMethod(Route $route): bool
