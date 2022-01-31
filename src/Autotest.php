@@ -28,23 +28,15 @@ final class Autotest
      */
     private $userRepository;
 
-    /**
-     * @var Route[]
-     */
-    private $unresolved = [];
-
-    /**
-     * @var RouteDecorator[]
-     */
-    private $resolved = [];
-
+    /** @var RouteDecorator[] */
+    private $routes;
 
     public function __construct(
         PathResolverInterface $pathResolver,
-        RouterInterface $router,
-        array $excludedPaths = [],
-        ?string $adminEmail = null,
-        ?string $userRepository = null
+        RouterInterface       $router,
+        array                 $excludedPaths = [],
+        ?string               $adminEmail = null,
+        ?string               $userRepository = null
     ) {
         $this->pathResolver = $pathResolver;
         $this->router = $router;
@@ -53,24 +45,18 @@ final class Autotest
         $this->userRepository = $userRepository;
 
         $this->initialize();
-
     }
 
     private function initialize(): void
     {
-        $iterator = $this->router->getRouteCollection()->getIterator();
-
-        foreach ($iterator as $route) {
+        /** @var Route $route */
+        foreach ($this->router->getRouteCollection() as $routeName => $route) {
             if (in_array($route->getPath(), $this->excludedPaths)) {
                 continue;
             }
-
-            $path = $this->pathResolver->resolve($route);
-            if ($path) {
-                $this->resolved[] = $path;
-            } else {
-                $this->unresolved[] = $route;
-            }
+            $decoratedRoute = new RouteDecorator($route, $routeName);
+            $this->pathResolver->resolve($decoratedRoute);
+            $this->routes[] = $decoratedRoute;
         }
     }
 
@@ -79,15 +65,35 @@ final class Autotest
      */
     public function getRelevantRoutes(): array
     {
-        return $this->resolved;
+        return array_filter($this->routes, function (RouteDecorator $route) {
+            return $route->getResolvedPath() !== null;
+        });
     }
 
     /**
-     * @return Route[]
+     * @return RouteDecorator[]
      */
     public function getUnresolvedRoutes(): array
     {
-        return $this->unresolved;
+        return array_filter($this->routes, function (RouteDecorator $route) {
+            return $route->getResolvedPath() === null;
+        });
+    }
+
+    /**
+     * @return string
+     */
+    public function getListOfUnresolvedPaths(): string
+    {
+        return join(
+            ",\n",
+            array_map(
+                function (RouteDecorator $route) {
+                    return "\"{$route->getRouteName()}\" => \"{$route->getRoute()->getPath()}\"";
+                },
+                $this->getUnresolvedRoutes()
+            )
+        );
     }
 
     /**

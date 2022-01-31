@@ -15,12 +15,16 @@ class RouteDecorator
     /** @var string */
     protected $resolvedPath;
 
-    public function __construct(Route $route)
+    /** @var string */
+    protected $routeName;
+
+    public function __construct(Route $route, string $routeName)
     {
         $this->route = $route;
+        $this->routeName = $routeName;
     }
 
-    public function getResolvedPath(): string
+    public function getResolvedPath(): ?string
     {
         return $this->resolvedPath;
     }
@@ -36,5 +40,13 @@ class RouteDecorator
     public function getRoute(): Route
     {
         return $this->route;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRouteName(): string
+    {
+        return $this->routeName;
     }
 }

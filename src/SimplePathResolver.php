@@ -9,26 +9,22 @@ use Symfony\Component\Routing\Route;
  */
 class SimplePathResolver implements PathResolverInterface
 {
-    public function resolve(Route $route): ?RouteDecorator
+    public function resolve(RouteDecorator $route):void
     {
         if (!$this->hasGetMethod($route)) {
-            return null;
+            return;
         }
 
         $pathWithDefaults = $this->fillDefaults($route);
-        if ($this->hasWildcard($pathWithDefaults)) {
-            return null;
-        } else {
-            $routeDecorator = new RouteDecorator($route);
-            $routeDecorator->setResolvedPath($pathWithDefaults);
-            return $routeDecorator;
+        if (!$this->hasWildcard($pathWithDefaults)) {
+            $route->setResolvedPath($pathWithDefaults);
         }
     }
 
-    private function fillDefaults(Route $route): string
+    private function fillDefaults(RouteDecorator $route): string
     {
-        $replaced = $route->getPath();
-        foreach ($route->getDefaults() as $name => $value) {
+        $replaced = $route->getRoute()->getPath();
+        foreach ($route->getRoute()->getDefaults() as $name => $value) {
             if ($value !== null && $name !== '_controller' && strpos($replaced, '{'.$name.'}')) {
                 $replaced = str_replace('{'.$name.'}', $value, $replaced);
             }
@@ -41,12 +37,12 @@ class SimplePathResolver implements PathResolverInterface
         return strpos($path, '{') !== false;
     }
 
-    private function hasGetMethod(Route $route): bool
+    private function hasGetMethod(RouteDecorator $route): bool
     {
-        if (!$route->getMethods()) {
+        if (!$route->getRoute()->getMethods()) {
             return true;
         }
 
-        return in_array('GET', $route->getMethods());
+        return in_array('GET', $route->getRoute()->getMethods());
     }
 }
