@@ -2,7 +2,7 @@
 
 namespace Mano\AutotestBundle;
 
-use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouterInterface;
 
 final class Autotest
@@ -16,7 +16,7 @@ final class Autotest
      */
     private $router;
     /**
-     * @var array
+     * @var string[]
      */
     private $excludedPaths;
     /**
@@ -28,19 +28,50 @@ final class Autotest
      */
     private $userRepository;
 
+    /**
+     * @var Route[]
+     */
+    private $unresolved = [];
+
+    /**
+     * @var RouteDecorator[]
+     */
+    private $resolved = [];
+
+
     public function __construct(
         PathResolverInterface $pathResolver,
         RouterInterface $router,
         array $excludedPaths = [],
         ?string $adminEmail = null,
         ?string $userRepository = null
-    )
-    {
+    ) {
         $this->pathResolver = $pathResolver;
         $this->router = $router;
         $this->excludedPaths = $excludedPaths;
         $this->adminEmail = $adminEmail;
         $this->userRepository = $userRepository;
+
+        $this->initialize();
+
+    }
+
+    private function initialize(): void
+    {
+        $iterator = $this->router->getRouteCollection()->getIterator();
+
+        foreach ($iterator as $route) {
+            if (in_array($route->getPath(), $this->excludedPaths)) {
+                continue;
+            }
+
+            $path = $this->pathResolver->resolve($route);
+            if ($path) {
+                $this->resolved[] = $path;
+            } else {
+                $this->unresolved[] = $route;
+            }
+        }
     }
 
     /**
@@ -48,20 +79,15 @@ final class Autotest
      */
     public function getRelevantRoutes(): array
     {
-        $paths = [];
+        return $this->resolved;
+    }
 
-        $iterator = $this->router->getRouteCollection()->getIterator();
-
-        foreach ($iterator as $route) {
-            if (in_array($route->getPath(), $this->excludedPaths)) {
-                continue;
-            }
-            if ($path = $this->pathResolver->resolve($route)) {
-                $paths[] = $path;
-            }
-        }
-
-        return $paths;
+    /**
+     * @return Route[]
+     */
+    public function getUnresolvedRoutes(): array
+    {
+        return $this->unresolved;
     }
 
     /**
