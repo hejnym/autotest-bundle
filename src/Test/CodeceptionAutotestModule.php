@@ -80,7 +80,7 @@ class CodeceptionAutotestModule extends \Codeception\Module
 
     protected function logIn(): void
     {
-        $repository = $this->symfony->grabRepository($this->autotest->getUserRepository());
+        $repository = $this->symfony->grabService($this->autotest->getUserRepository());
         if (!$repository) {
             throw new \InvalidArgumentException(sprintf("User repository '%s' not found. Define it in the the 
                 config under key user_repository.", $this->autotest->getUserRepository()));
