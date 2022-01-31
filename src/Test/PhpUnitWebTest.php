@@ -15,7 +15,7 @@ class PhpUnitWebTest extends WebTestCase
      */
     protected $client;
 
-    /** @var Autotest  */
+    /** @var Autotest */
     protected $autotest;
 
     /* TODO remove __construct as described in deprecations - it can not be replaced by setUpBeforeClass() as dataProvider is called beforehand */
@@ -32,6 +32,16 @@ class PhpUnitWebTest extends WebTestCase
 
     public function setUp(): void
     {
+        static $firstCall = true;
+        if ($firstCall === true) {
+
+            echo "Autotest unresolved paths:\n[\n";
+            echo $this->autotest->getListOfUnresolvedPaths();
+            echo "\n]\n";
+
+            $firstCall = false;
+        }
+
         self::ensureKernelShutdown();
         $this->client = static::createClient();
     }

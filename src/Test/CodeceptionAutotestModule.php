@@ -46,6 +46,12 @@ class CodeceptionAutotestModule extends \Codeception\Module
     {
         $errors = [];
 
+
+        echo "\nAutotest unresolved paths:\n[\n";
+        echo $this->autotest->getListOfUnresolvedPaths();
+        echo "\n]\n";
+
+
         if ($this->autotest->getAdminEmail()) {
             $this->logIn();
         }

@@ -65,9 +65,12 @@ final class Autotest
      */
     public function getRelevantRoutes(): array
     {
-        return array_filter($this->routes, function (RouteDecorator $route) {
+        $resolvedPaths =  array_filter($this->routes, function (RouteDecorator $route) {
             return $route->getResolvedPath() !== null;
         });
+
+        return $resolvedPaths;
+
     }
 
     /**
@@ -81,15 +84,15 @@ final class Autotest
     }
 
     /**
-     * @return string
+     * @return string Yaml list of objects
      */
     public function getListOfUnresolvedPaths(): string
     {
         return join(
-            ",\n",
+            "\n",
             array_map(
                 function (RouteDecorator $route) {
-                    return "\"{$route->getRouteName()}\" => \"{$route->getRoute()->getPath()}\"";
+                    return "- name: {$route->getRouteName()}\n  path: '{$route->getRoute()->getPath()}'";
                 },
                 $this->getUnresolvedRoutes()
             )
