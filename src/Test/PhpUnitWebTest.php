@@ -35,9 +35,9 @@ class PhpUnitWebTest extends WebTestCase
         static $firstCall = true;
         if ($firstCall === true) {
 
-            echo "Autotest unresolved paths:\n[\n";
+            echo "\nAutotest unresolved paths:\n\n";
             echo $this->autotest->getListOfUnresolvedPaths();
-            echo "\n]\n";
+            echo "\n\n";
 
             $firstCall = false;
         }

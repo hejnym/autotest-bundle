@@ -8,10 +8,8 @@ use Symfony\Component\Routing\Route;
 
 class TestPathResolver implements PathResolverInterface
 {
-    public function resolve(Route $route): ?RouteDecorator
+    public function resolve(RouteDecorator $route):void
     {
-        $routeDecorator = new RouteDecorator($route);
-        $routeDecorator->setResolvedPath('foo');
-        return $routeDecorator;
+        $route->setResolvedPath('foo');
     }
 }

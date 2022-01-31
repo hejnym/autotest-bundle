@@ -23,7 +23,8 @@ class AutotestExtension extends Extension
             $container->setAlias('mano_autotest.path_resolver_interface', $config['resolver']);
         }
         $definition->setArgument(2, $config['exclude']);
-        $definition->setArgument(3, $config['admin_email']);
-        $definition->setArgument(4, $config['user_repository']);
+        $definition->setArgument(3, $config['include']);
+        $definition->setArgument(4, $config['admin_email']);
+        $definition->setArgument(5, $config['user_repository']);
     }
 }

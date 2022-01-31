@@ -2,7 +2,7 @@
 
 Symfony bundle for automatic routes testing - check the response code of all static routes. 
 It supports both PHPUnit and Codeception. The module lists all the available routes with GET method, add default values and filter just those that does not
-contain wildcards. Then the response is checked just for the successful code. 
+contain wildcards. The routes that were not matched can be added manually though - see config. Then the response is checked just for the successful code. 
 
 In order to access authorised routes, set admin email in the config (or any user that has super privilege). 
 There must be 'email' property on the user entity (or at least getter).
@@ -18,7 +18,7 @@ Installation
 composer require mano/autotest-bundle --dev
 ```
 
-- enable the bundle in *config/bundles.php* by pasting new array item
+- enable the bundle in *config/test/bundles.php* by pasting new array item
 
 ```php
 [   
@@ -37,17 +37,22 @@ create file *config/packages/autotest.yaml* and override the defaults if necessa
 autotest:
 
     # Paths that will be excluded from the test.
-    exclude:              []
+    exclude: []
+    
+    # Paths that will be included into the test as they could not be resolved automatically. Array of object in format name:{nameOfRoute}, path:{manuallyAddedPath}'
+    include: []
 
     # Custom resolver to be used - must implement PathResolverInterface
-    resolver:             null
+    resolver: null
 
     # Email of admin that can access all the routes - if authorisation needed.
-    admin_email:          null
+    admin_email: null
 
     # User repository to be used - must have email property defined.
-    user_repository:      App\Repository\UserRepository
+    user_repository: App\Repository\UserRepository
 ```
+
+### exclude paths
 
 Some routes might need to be excluded though (ex. '/logout','/login') as they are redirected.
 It is advisable to declare methods in the route annotation, so that you do not need to exclude here.
@@ -57,6 +62,21 @@ exclude: [
    '/logout','/login', # always redirects
    '/api/list', # secured by api acl
    '/foo', # get method that passes required params in the query
+]
+```
+
+### include paths 
+
+All the routes that could not be automatically resolved (contain wildcard that can not be filled from defaults) 
+can be listed here to be included in the test.
+
+**The full list of unresolved paths is outputted at the beginning of the test**. Te
+When a route listed in included paths it is removed from the output.
+
+```yaml
+include:
+  - name: route_name
+    path: '/foo/bar'
 ]
 ```
 
