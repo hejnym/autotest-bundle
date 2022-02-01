@@ -70,8 +70,8 @@ exclude: [
 All the routes that could not be automatically resolved (contain wildcard that can not be filled from defaults) 
 can be listed here to be included in the test.
 
-**The full list of unresolved paths is outputted at the beginning of the test**. Te
-When a route listed in included paths it is removed from the output.
+**The full list of unresolved paths is outputted at the beginning of the test**.
+A route listed in included paths is removed from the output.
 
 ```yaml
 include:
@@ -138,7 +138,7 @@ class fooCest
 }
 ```
 
-** Codeception is stricter with login - different authenticators (api keys) will not work out of the box.**
+**Codeception is stricter with login - different authenticators (api keys) will not work out of the box.**
 
 Extension
 ------------
