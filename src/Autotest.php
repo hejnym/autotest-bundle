@@ -19,7 +19,7 @@ final class Autotest
     /**
      * @var string[]
      */
-    private $excludedPaths;
+    private $exludedPatterns;
 
     /**
      * @var array
@@ -36,20 +36,20 @@ final class Autotest
     private $userRepository;
 
     /** @var RouteDecorator[] */
-    private $routes;
+    private $routes = [];
 
 
     public function __construct(
         PathResolverInterface $pathResolver,
         RouterInterface       $router,
-        array                 $excludedPaths = [],
+        array                 $exludedPatterns = [],
         array                 $includePaths = [],
         ?string               $adminEmail = null,
         ?string               $userRepository = null
     ) {
         $this->pathResolver = $pathResolver;
         $this->router = $router;
-        $this->excludedPaths = $excludedPaths;
+        $this->exludedPatterns = $exludedPatterns;
         $this->includePaths = $includePaths;
         $this->adminEmail = $adminEmail;
         $this->userRepository = $userRepository;
@@ -61,7 +61,7 @@ final class Autotest
     {
         /** @var Route $route */
         foreach ($this->router->getRouteCollection() as $routeName => $route) {
-            if (in_array($route->getPath(), $this->excludedPaths)) {
+            if ($this->isToBeExcluded($route)) {
                 continue;
             }
             $decoratedRoute = new RouteDecorator($route, $routeName);
@@ -113,6 +113,17 @@ final class Autotest
         return array_map(function (array $row) {
             return $row['name'];
         }, $this->includePaths);
+    }
+
+    private function isToBeExcluded(Route $route):bool
+    {
+        foreach ($this->exludedPatterns as $excludedPattern) {
+            $regex = '~^'.$excludedPattern.'$~i';
+            if (preg_match($regex, $route->getPath())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

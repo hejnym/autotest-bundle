@@ -18,7 +18,7 @@ class FunctionalTest extends TestCase
         $this->assertInstanceOf(Autotest::class, $autotestService);
     }
 
-    public function testOnlyRelevantRoutesOutputted()
+    public function testOnlyRoutesWithoutWildcardsAndWithGetMethodRelevant()
     {
         $kernel = new TestKernel();
         $kernel->boot();
@@ -31,13 +31,30 @@ class FunctionalTest extends TestCase
             return $route->getResolvedPath();
         }, $paths);
 
-        // only foo and foolo
+        // only those two bellow
         $this->assertCount(2, $pathNames);
 
         // default added
         $this->assertContains('/bar/bar', $pathNames);
+
         // no wildcard
         $this->assertContains('/foo', $pathNames);
+    }
+
+    public function testExludedRoutesNotPartOfRelevant()
+    {
+        // exclude /bar/{bar} and /foo
+        $kernel = new TestKernel([
+            'exclude' => [
+                '/fo{2}',
+                '/bar/.*'
+            ]
+        ]);
+        $kernel->boot();
+        $container = $kernel->getContainer();
+        /** @var Autotest $autotestService */
+        $autotestService = $container->get('mano_autotest.autotest');
+        $this->assertCount(0, $autotestService->getRelevantRoutes());
     }
 
     public function testPathResolverCanBeAltered()

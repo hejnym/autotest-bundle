@@ -36,7 +36,7 @@ create file *config/packages/test/autotest.yaml* and override the defaults if ne
 # Default configuration for extension with alias: "autotest"
 autotest:
 
-    # Paths that will be excluded from the test.
+    # Paths that will be excluded from the test. Exclusion is made before resolving paths therefore the regex may include curly braces (if the route to be excluded contains them).
     exclude: []
     
     # Paths that will be included into the test as they could not be resolved automatically. Array of object in format name:{nameOfRoute}, path:{manuallyAddedPath}'
@@ -62,6 +62,8 @@ exclude: [
    '/logout','/login', # always redirects
    '/api/list', # secured by api acl
    '/foo', # get method that passes required params in the query
+   '/foo/{name}' # if the route had default name (and therefore resolved)
+   '/foo/.*' # pattern will be wrapped by ~^regex$~i
 ]
 ```
 

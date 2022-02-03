@@ -16,7 +16,8 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('exclude')
                     ->prototype('scalar')->end()
-                    ->info('Paths that will be excluded from the test.')
+                    ->info('Paths that will be excluded from the test. Regular expressions can be used.
+                     Exclusion is made before resolving paths therefore the regex may include curly braces (if the route to be excluded contains them).')
                 ->end()
                 ->arrayNode('include')
                     ->arrayPrototype()
