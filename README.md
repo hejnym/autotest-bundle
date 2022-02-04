@@ -1,11 +1,9 @@
 # Autotest bundle
 
-Symfony bundle for automatic routes testing - check the response code of all static routes. 
-It supports both PHPUnit and Codeception. The module lists all the available routes with GET method, add default values and filter just those that does not
-contain wildcards. The routes that were not matched can be added manually though - see config. Then the response is checked just for the successful code. 
+Symfony bundle for automatic routes testing - check the response code of all static routes defined in the framework. 
+It supports both PHPUnit and Codeception testing. The module lists all the available routes with GET method, add default values and filter just those that does not contain wildcards. The routes that were not matched can be added manually though - see [config](#include-paths). Then the response is checked just for the successful code.
 
-In order to access authorised routes, set admin email in the config (or any user that has super privilege). 
-There must be 'email' property on the user entity (or at least getter).
+In order to access authorised routes, set admin email in the config (or any user that has super privilege). There must be 'email' property on the user entity (or at least getter).
 Some routes might need to be excluded though (ex. '/logout','/login') as they are redirected.
 
 
@@ -55,16 +53,16 @@ autotest:
 ### exclude paths
 
 Some routes might need to be excluded though (ex. '/logout','/login') as they are redirected.
-It is advisable to declare methods in the route annotation, so that you do not need to exclude here.
+It is advisable to declare allowed methods in the route annotation, so that you do not need to exclude POST only routes here.
+Regex can be used here to match multiple routes at once.
 
 ```yaml
-exclude: [
-   '/logout','/login', # always redirects
-   '/api/list', # secured by api acl
-   '/foo', # get method that passes required params in the query
-   '/foo/{name}' # if the route had default name (and therefore resolved)
-   '/foo/.*' # pattern will be wrapped by ~^regex$~i
-]
+exclude: 
+   - '/logout'
+   - '/login'
+   - '/foo/{name}' # if the route had default name (and therefore resolved)
+   - '/foo/.*' # pattern will be wrapped by ~^regex$~i
+
 ```
 
 ### include paths 
@@ -148,4 +146,4 @@ The used path resolver is simple - it just adds defaults  to the path and takes 
 contain wildcards (after completing defaults).
 
 Custom resolver can be used and referenced from config. The resolver must implement 
-*Mano\AutotestBundle\PathResolverInterface* and therefore return *RouteDecorator* that holds the Route and resolved path.
+*Mano\AutotestBundle\PathResolverInterface*.
