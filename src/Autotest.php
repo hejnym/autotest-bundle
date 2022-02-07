@@ -127,17 +127,23 @@ final class Autotest
     }
 
     /**
-     * @return string Yaml list of objects
+     * @return string|null Yaml list of objects or null then all resolved.
      */
-    public function getListOfUnresolvedPaths(): string
+    public function getListOfUnresolvedPaths(): ?string
     {
+        $unresolvedRoutes = $this->getUnresolvedRoutes();
+
+        if (!$unresolvedRoutes) {
+            return null;
+        }
+
         return join(
             "\n",
             array_map(
                 function (RouteDecorator $route) {
                     return "- name: {$route->getRouteName()}\n  path: '{$route->getRoute()->getPath()}'";
                 },
-                $this->getUnresolvedRoutes()
+                $unresolvedRoutes
             )
         );
     }
