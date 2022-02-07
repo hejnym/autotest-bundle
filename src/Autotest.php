@@ -141,7 +141,15 @@ final class Autotest
             "\n",
             array_map(
                 function (RouteDecorator $route) {
-                    return "- name: {$route->getRouteName()}\n  path: '{$route->getRoute()->getPath()}'";
+
+                    $comment = $route->getResolverComment()? "# ".$route->getResolverComment():'';
+
+                    return sprintf(
+                        "%s\n- name: %s\n  path: '%s'",
+                        $comment,
+                        $route->getRouteName(),
+                        $route->getRoute()->getPath()
+                    );
                 },
                 $unresolvedRoutes
             )

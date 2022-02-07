@@ -9,14 +9,18 @@ use Symfony\Component\Routing\Route;
  */
 class SimplePathResolver implements PathResolverInterface
 {
-    public function resolve(RouteDecorator $route):void
+    public function resolve(RouteDecorator $route): void
     {
         if (!$this->hasGetMethod($route)) {
+            $route->setResolverComment('Is not GET method.');
             return;
         }
 
         $pathWithDefaults = $this->fillDefaults($route);
-        if (!$this->hasWildcard($pathWithDefaults)) {
+
+        if ($this->hasWildcard($pathWithDefaults)) {
+            $route->setResolverComment('Contains wildcard.');
+        } else {
             $route->setResolvedPath($pathWithDefaults);
         }
     }
@@ -25,8 +29,8 @@ class SimplePathResolver implements PathResolverInterface
     {
         $replaced = $route->getRoute()->getPath();
         foreach ($route->getRoute()->getDefaults() as $name => $value) {
-            if ($value !== null && $name !== '_controller' && strpos($replaced, '{'.$name.'}')) {
-                $replaced = str_replace('{'.$name.'}', $value, $replaced);
+            if ($value !== null && $name !== '_controller' && strpos($replaced, '{' . $name . '}')) {
+                $replaced = str_replace('{' . $name . '}', $value, $replaced);
             }
         }
         return $replaced;

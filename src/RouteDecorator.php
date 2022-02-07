@@ -15,6 +15,12 @@ class RouteDecorator
     /** @var string */
     protected $resolvedPath;
 
+    /**
+     * Add comment about why the route could not be resolved
+     * @var string
+     */
+    protected $resolverComment;
+
     /** @var string */
     protected $routeName;
 
@@ -48,5 +54,15 @@ class RouteDecorator
     public function getRouteName(): string
     {
         return $this->routeName;
+    }
+
+    public function getResolverComment(): ?string
+    {
+        return $this->resolverComment;
+    }
+
+    public function setResolverComment(string $resolverComment): void
+    {
+        $this->resolverComment = $resolverComment;
     }
 }
