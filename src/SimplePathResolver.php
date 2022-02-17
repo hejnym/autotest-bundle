@@ -9,11 +9,11 @@ use Symfony\Component\Routing\Route;
  */
 class SimplePathResolver implements PathResolverInterface
 {
-    public function resolve(RouteDecorator $route): void
+    public function resolve(RouteDecorator $route): RouteDecorator
     {
         if (!$this->hasGetMethod($route)) {
             $route->setResolverComment('Is not GET method.');
-            return;
+            return $route;
         }
 
         $pathWithDefaults = $this->fillDefaults($route);
@@ -23,6 +23,8 @@ class SimplePathResolver implements PathResolverInterface
         } else {
             $route->setResolvedPath($pathWithDefaults);
         }
+
+        return $route;
     }
 
     private function fillDefaults(RouteDecorator $route): string

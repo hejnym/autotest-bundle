@@ -65,8 +65,7 @@ final class Autotest
                 continue;
             }
             $decoratedRoute = new RouteDecorator($route, $routeName);
-            $this->pathResolver->resolve($decoratedRoute);
-            $this->routes[] = $decoratedRoute;
+            $this->routes[] = $this->pathResolver->resolve($decoratedRoute);
         }
     }
 
